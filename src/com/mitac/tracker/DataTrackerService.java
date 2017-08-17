@@ -74,6 +74,14 @@ public class DataTrackerService extends Service {
 //            Log.i(TAG, "*****************************");
             dataHandler.postDelayed(retryRunnable, SAMPLE_INTERVAL);
             if(DataTracker.m_log == true) {
+                   if (m_strName.compareTo("") == 0) {
+                        long time = System.currentTimeMillis();
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MMdd_HHmm-ss");
+                        String newtime = formatter.format(new Date(time));
+                        m_strName = newtime;
+                        m_strName = m_strName + ".csv";
+                        Log.i(TAG, "########################### "+m_strName);
+                    }
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     long time = System.currentTimeMillis();
                     Date d1 = new Date(time);
@@ -92,7 +100,11 @@ public class DataTrackerService extends Service {
                     if (mStorage) {
                         CopyFileToSD(m_strName);
                     }
-            }          
+            } else {
+                    if (m_strName.compareTo("") != 0) {
+                        m_strName = "";
+                    }
+            }
         }
     };
 
