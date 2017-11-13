@@ -45,6 +45,7 @@ public class DataTrackerService extends Service {
     private static String strAppPath = "/data/data/com.mitac.tracker/files/";
     private String m_strName = "";// TAG+".csv";
     private static int SAMPLE_INTERVAL = 5000;
+    private String m_strPing = "Ping FAIL";
 
     /**
      * SaveToFile:  /data/data/com.mitac.tracker/files/
@@ -72,7 +73,6 @@ public class DataTrackerService extends Service {
     private Runnable retryRunnable = new Runnable() {
         public void run() {
 //            Log.i(TAG, "*****************************");
-            dataHandler.postDelayed(retryRunnable, SAMPLE_INTERVAL);
             if(DataTracker.m_log == true) {
                    if (m_strName.compareTo("") == 0) {
                         long time = System.currentTimeMillis();
@@ -86,17 +86,20 @@ public class DataTrackerService extends Service {
                     long time = System.currentTimeMillis();
                     Date d1 = new Date(time);
                     String strTime = format.format(d1);
+                    //Recording the status of network
+                    ping();
         
                     String str = null;
                     if(mTelephonyManager!=null && mSignalStrength!=null) {
-                        str = strTime+","+mTelephonyManager.getNetworkType() + "," + mSignalStrength.getGsmSignalStrength() +"\n";
+                        str = strTime+","+mTelephonyManager.getNetworkType() + "," + mSignalStrength.getGsmSignalStrength() +","+m_strPing+"\n";
                     } else {
-                        str = strTime+","+"mocked data" + "," + "99" +"\n";
+                        str = strTime+","+"mocked data" + "," + "99" +","+m_strPing+"\n";
                     }
         
                     Log.i(TAG, str);
         
                     SaveToFile(str);
+
                     if (mStorage) {
                         CopyFileToSD(m_strName);
                     }
@@ -105,6 +108,7 @@ public class DataTrackerService extends Service {
                         m_strName = "";
                     }
             }
+            dataHandler.postDelayed(retryRunnable, SAMPLE_INTERVAL);
         }
     };
 
@@ -128,6 +132,39 @@ public class DataTrackerService extends Service {
         }
     };
 
+    private String avgSpeed(String str) {
+        int position = str.indexOf("min/avg/max");
+        //Log.d(TAG, "str: "+str);
+        //Log.d(TAG, "position: "+position);
+        if (position != -1) {
+            String subStr = str.substring(position + 18);
+            position = subStr.indexOf("/");
+            subStr = subStr.substring(position + 1);
+            position = subStr.indexOf("/");
+            return subStr.substring(0, position);
+        } else {
+            return null;
+        }
+    }
+
+    private boolean ping() {
+        String ping_result;
+        String PING = "/system/bin/ping -w 4 "+DataTracker.m_strDomain;
+        Log.d(TAG, PING);
+        //String PING = "/system/bin/cat /sys/sys_info/hw_ver";
+        String result = null;
+        ping_result = CommandManager.run_command2(PING);
+
+        if (avgSpeed(ping_result) != null) {
+            m_strPing = "Ping OK";
+            //Log.d(TAG, m_strPing);
+            return true;
+        } else {
+            m_strPing = "Ping FAIL";
+            //Log.d(TAG, m_strPing);
+            return false;
+        }
+    }
     private boolean hasService() {
         if (mServiceState != null) {
             switch (mServiceState.getState()) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, DataTracker!</string>
+    <string name="hello">Please input your web site, for example, www.baidu.com</string>
     <string name="app_name">DataTracker</string>
     <string name="start_service">start service in background</string>
     <string name="start">start logging</string>

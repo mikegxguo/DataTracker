@@ -10,16 +10,27 @@
     android:text="@string/hello"
      />
 
+    <EditText
+        android:id="@+id/edit_domain"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dip"
+        android:background="@android:drawable/editbox_background"
+        android:minWidth="200dip"
+        android:textColor="#000000" />
 
 <Button 
 android:id="@+id/startBtn" 
+android:layout_marginTop="10dp"
 android:text="@string/start_service" 
 android:layout_width="wrap_content" 
 android:layout_height="wrap_content"
 />
 
 <Button
-android:id="@+id/stopBtn" 
+ android:id="@+id/stopBtn" 
+ android:layout_marginTop="10dp"
  android:text="@string/stop" 
  android:layout_width="wrap_content" 
  android:layout_height="wrap_content"
