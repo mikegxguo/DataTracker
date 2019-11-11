@@ -246,10 +246,10 @@ public class DataTrackerService extends Service {
         
         Log.i(TAG, "########################### 1");
         mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                Log.i(TAG, "########################### 1111111111");
-                mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
-                                                                                                        | PhoneStateListener.LISTEN_SERVICE_STATE
-                                                                                                        | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        Log.i(TAG, "########################### 1111111111");
+        mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
+                                                     | PhoneStateListener.LISTEN_SERVICE_STATE
+                                                     | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         
         Log.i(TAG, "########################### 2");
         if (m_strName.compareTo("") == 0) {
